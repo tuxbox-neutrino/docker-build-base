@@ -41,7 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lighttpd \
     linux-libc-dev \
     locales \
-    locales-all \
+    locales-all aspell aspell-de \
     make \
     nano \
     net-tools \
