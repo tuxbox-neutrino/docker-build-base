@@ -14,10 +14,11 @@ docker build -t debian-tuxbox-base:$TAG -t debian-tuxbox-base:latest .
 docker login
 
 # Create and tag Docker-Image
+ORG=<Your name of registry organisation>
 TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
-docker build -t <org>/debian-tuxbox-base:$TAG -t <org>/debian-tuxbox-base:latest .
+docker build -t $ORG/debian-tuxbox-base:$TAG -t $ORG/debian-tuxbox-base:latest .
 
 # Push Images to Docker Hub
-docker push <org>/debian-tuxbox-base:$TAG
-docker push <org>/debian-tuxbox-base:latest
+docker push $ORG/debian-tuxbox-base:$TAG
+docker push $ORG/debian-tuxbox-base:latest
 ```
