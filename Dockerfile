@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git-gui \
     gitk \
     gnupg \
+    less \
     iputils-ping \
     libc6 \
     libcapstone4 \
