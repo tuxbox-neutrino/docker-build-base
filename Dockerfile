@@ -43,6 +43,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     linux-libc-dev \
     locales \
     locales-all aspell aspell-de \
+    lz4 \
     make \
     nano \
     net-tools \
@@ -68,6 +69,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     util-linux \
     wget \
     x11-xserver-utils \
+    zstd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
