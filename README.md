@@ -1,4 +1,4 @@
-**Build Docker a image**
+**Build Docker image**
 
 ```bash
 TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
