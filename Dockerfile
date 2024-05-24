@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     diffstat \
     diffutils \
     doxygen \
+    fakeroot \
     file \
     gawk \
     gcc \
@@ -28,8 +29,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git-gui \
     gitk \
     gnupg \
-    less \
     iputils-ping \
+    less \
     libc6 \
     libcapstone4 \
     libc-bin \
@@ -61,6 +62,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     runit \
     sed \
     socat \
+    sshpass \
     subversion \
     sudo \
     texinfo \
@@ -69,6 +71,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     util-linux \
     wget \
     x11-xserver-utils \
+    zip \
     zstd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
