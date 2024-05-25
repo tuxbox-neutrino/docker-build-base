@@ -51,6 +51,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     net-tools \
     ninja-build \
     openssh-server \
+    openjdk-11-jdk \
     passwd \
     procps \
     pylint3 \
