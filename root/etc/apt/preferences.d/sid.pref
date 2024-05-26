@@ -1,0 +1,20 @@
+ 
+Package: *
+Pin: release a=bullseye
+Pin-Priority: 500
+
+Package: gcc-13
+Pin: release a=sid
+Pin-Priority: 600
+
+Package: g++-13
+Pin: release a=sid
+Pin-Priority: 600
+
+Package: gcc-13-multilib
+Pin: release a=sid
+Pin-Priority: 600
+
+Package: g++-13-multilib
+Pin: release a=sid
+Pin-Priority: 600
