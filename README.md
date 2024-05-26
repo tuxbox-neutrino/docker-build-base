@@ -19,6 +19,5 @@ TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "latest")
 docker build -t $ORG/debian-tuxbox-base:$TAG -t $ORG/debian-tuxbox-base:latest .
 
 # Push Images to Docker Hub
-docker push $ORG/debian-tuxbox-base:$TAG
-docker push $ORG/debian-tuxbox-base:latest
+docker push $ORG/debian-tuxbox-base:$TAG && docker push $ORG/debian-tuxbox-base:latest
 ```
