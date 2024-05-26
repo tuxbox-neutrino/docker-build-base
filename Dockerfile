@@ -1,6 +1,8 @@
 # Use the official Debian 11 image as a base
 FROM debian:bullseye-slim
 
+ARG VERSION
+
 # Install the required tools and packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
@@ -100,7 +102,8 @@ RUN apt-get update && \
     rm /etc/apt/preferences.d/sid.pref
 
 # Some labels
-LABEL maintainer="Thilo Graf <dbt@novatux.de>" \
+LABEL container.version=$VERSION \
+      maintainer="Thilo Graf <dbt@novatux.de>" \
       maintainer.org="tuxbox-neutrino" \
       maintainer.org.uri="https://tuxbox-neutrino.org" \
       org.opencontainers.image.description="Debian based" \
