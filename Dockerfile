@@ -83,9 +83,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY root/etc/apt/sources.list.d/sid.list /etc/apt/sources.list.d/sid.list
 COPY root/etc/apt/preferences.d/sid.pref /etc/apt/preferences.d/sid.pref
 
-# Install gcc 13 and set gcc-13 as default
+# Install gcc 13 and set gcc-13 as default and git-filter-repo
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc-13 g++-13 gcc-13-multilib g++-13-multilib && \
+    apt-get install -y --no-install-recommends \
+    gcc-13 \
+    g++-13 \
+    gcc-13-multilib \
+    g++-13-multilib \
+    git-filter-repo && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 60 && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 60 && \
     apt-get clean && \
