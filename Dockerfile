@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fakeroot \
     file \
     gawk \
+    graphviz \
     git \
     git-core \
     git-gui \
