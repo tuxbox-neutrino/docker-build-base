@@ -99,8 +99,8 @@ RUN apt-get update && \
     apt-get clean && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    rm /etc/apt/sources.list.d/sid.list && \
-    rm /etc/apt/preferences.d/sid.pref
+    rm -f /etc/apt/sources.list.d/sid.list && \
+    rm -f /etc/apt/preferences.d/sid.pref
 
 # Some labels
 LABEL container.version=$VERSION \
