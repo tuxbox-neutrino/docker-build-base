@@ -4,7 +4,9 @@ FROM debian:bullseye-slim
 ARG VERSION
 
 # Install the required tools and packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' > /etc/apt/sources.list.d/bullseye-backports.list && \
+    DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     bash \
     binutils \
     build-essential \
@@ -24,6 +26,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     doxygen \
     fakeroot \
     file \
+    gcc \
+    g++ \
+    gcc-multilib \
+    g++-multilib \
+    git-filter-repo \
     gawk \
     graphviz \
     git \
@@ -77,30 +84,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     x11-xserver-utils \
     zip \
-    zstd && \
-    apt-get clean && \
+    zstd
+
+# cleanup
+RUN apt-get clean && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Copy additional apt config files
-COPY root/etc/apt/sources.list.d/sid.list /etc/apt/sources.list.d/sid.list
-COPY root/etc/apt/preferences.d/sid.pref /etc/apt/preferences.d/sid.pref
-
-# Install gcc 13 and set gcc-13 as default and git-filter-repo
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gcc-13 \
-    g++-13 \
-    gcc-13-multilib \
-    g++-13-multilib \
-    git-filter-repo && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 60 && \
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 60 && \
-    apt-get clean && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    rm -f /etc/apt/sources.list.d/sid.list && \
-    rm -f /etc/apt/preferences.d/sid.pref
 
 # Some labels
 LABEL container.version=$VERSION \
