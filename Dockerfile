@@ -1,12 +1,13 @@
 # Use the official Debian 11 image as a base
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 ARG VERSION
 
 # Install the required tools and packages
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' > /etc/apt/sources.list.d/bullseye-backports.list && \
-    DEBIAN_FRONTEND=noninteractive apt-get update && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    aspell \
+    aspell-de \
     bash \
     binutils \
     build-essential \
@@ -26,50 +27,61 @@ RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' > /etc/apt/s
     doxygen \
     fakeroot \
     file \
-    gcc \
     g++ \
-    gcc-multilib \
-    g++-multilib \
-    git-filter-repo \
     gawk \
-    graphviz \
+    gcc \
+    gcc-multilib \
     git \
     git-core \
+    git-filter-repo \
     git-gui \
     gitk \
+    g++-multilib \
     gnupg \
+    graphviz \
     iputils-ping \
     less \
+    libacl1 \
+    libbz2-dev \
     libc6 \
     libcapstone4 \
     libc-bin \
+    libdb5.3-dev \
     libegl1-mesa \
+    libexpat1-dev \
+    libgdbm-dev \
     libgl1-mesa-dri \
     libgl1-mesa-glx \
+    liblz4-tool \
+    liblzma-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    libreadline-dev \
     libsdl1.2debian \
     libsdl2-dev \
+    libsqlite3-dev \
+    libssl-dev \
     libxml2-utils \
     lighttpd \
     linux-libc-dev \
     locales \
     locales-all \
-    aspell \
-    aspell-de \
     lz4 \
     make \
     nano \
     net-tools \
     ninja-build \
+    openjdk-17-jdk \
     openssh-server \
-    openjdk-11-jdk \
     passwd \
     procps \
-    pylint3 \
-    python \
+    pylint \
     python3 \
     python3-git \
     python3-jinja2 \
     python3-pexpect \
+    python3-pip \
+    python3-subunit \
     rsync \
     runit \
     sed \
@@ -78,18 +90,49 @@ RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' > /etc/apt/s
     subversion \
     sudo \
     texinfo \
+    tk-dev \
     tree \
     unzip \
     util-linux \
     wget \
     x11-xserver-utils \
+    xz-utils \
     zip \
+    zlib1g-dev \
     zstd
+
+# Locales
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y locales && \
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
+#
+# Python 2.7
+ENV ALT_PYTHON_VERSION=2.7.18-8+deb11u1
+RUN wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/python2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb && \
+    wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/libpython2.7-stdlib_${ALT_PYTHON_VERSION}_amd64.deb && \
+    wget -nc https://ftp.debian.org/debian/pool/main/m/mime-support/mime-support_3.64_all.deb && \
+    wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/python2.7_${ALT_PYTHON_VERSION}_amd64.deb && \
+    dpkg -i python2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb && \
+    dpkg -i libpython2.7-stdlib_${ALT_PYTHON_VERSION}_amd64.deb && \
+    dpkg -i mime-support_3.64_all.deb && \
+    dpkg -i python2.7_${ALT_PYTHON_VERSION}_amd64.deb; \
+    apt-get install -f -y
+
+# gcc13
+ENV ALT_GCC_VERSION=14
+RUN echo "deb http://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    gcc-${ALT_GCC_VERSION} \
+    g++-${ALT_GCC_VERSION} \
+    gcc-${ALT_GCC_VERSION}-multilib \
+    g++-${ALT_GCC_VERSION}-multilib
 
 # cleanup
 RUN apt-get clean && \
     apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*
 
 # Some labels
 LABEL container.version=$VERSION \
