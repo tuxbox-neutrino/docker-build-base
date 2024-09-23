@@ -101,6 +101,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     zlib1g-dev \
     zstd
 
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+
 # Locales
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y locales && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
