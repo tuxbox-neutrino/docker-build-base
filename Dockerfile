@@ -4,6 +4,7 @@ FROM debian:bookworm-slim
 ARG VERSION
 
 # Install the required tools and packages
+ENV STD_GCC_VERSION=14
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     aspell \
@@ -101,6 +102,30 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     zlib1g-dev \
     zstd
 
+# Set the standard GCC version to install (replace STD_GCC_VERSION with the actual version)
+ARG STD_GCC_VERSION=12
+
+# Install the standard GCC and G++ versions
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${STD_GCC_VERSION} ${STD_GCC_VERSION} && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${STD_GCC_VERSION} ${STD_GCC_VERSION}
+
+# Set environment variable for alternative GCC version
+ENV ALT_GCC_VERSION=14
+
+# Add testing repo and install GCC/G++ 14 with multilib
+RUN echo "deb http://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    gcc-${ALT_GCC_VERSION} \
+    g++-${ALT_GCC_VERSION} \
+    gcc-${ALT_GCC_VERSION}-multilib \
+    g++-${ALT_GCC_VERSION}-multilib
+
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${ALT_GCC_VERSION} ${ALT_GCC_VERSION} && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${ALT_GCC_VERSION} ${ALT_GCC_VERSION} && \
+    update-alternatives --set gcc /usr/bin/gcc-${ALT_GCC_VERSION} && \
+    update-alternatives --set g++ /usr/bin/g++-${ALT_GCC_VERSION}
+
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # Locales
@@ -121,15 +146,7 @@ RUN wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/python2.7-minim
     dpkg -i python2.7_${ALT_PYTHON_VERSION}_amd64.deb; \
     apt-get install -f -y
 
-# gcc13
-ENV ALT_GCC_VERSION=14
-RUN echo "deb http://deb.debian.org/debian testing main" >> /etc/apt/sources.list && \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    gcc-${ALT_GCC_VERSION} \
-    g++-${ALT_GCC_VERSION} \
-    gcc-${ALT_GCC_VERSION}-multilib \
-    g++-${ALT_GCC_VERSION}-multilib
+
 
 # cleanup
 RUN apt-get clean && \
