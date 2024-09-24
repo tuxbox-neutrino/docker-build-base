@@ -136,17 +136,31 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y locales && \
 #
 # Python 2.7
 ENV ALT_PYTHON_VERSION=2.7.18-8+deb11u1
-RUN wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/python2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb && \
+ENV MIME_SUPPORT_VERSION=3.66
+RUN wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/libpython2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb && \
+    wget -nc https://ftp.debian.org/debian/pool/main/o/openssl/libssl1.1_1.1.1w-0+deb11u1_amd64.deb && \
+    wget -nc https://ftp.debian.org/debian/pool/main/libf/libffi/libffi7_3.3-6_amd64.deb  && \
+    wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/python2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb && \
     wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/libpython2.7-stdlib_${ALT_PYTHON_VERSION}_amd64.deb && \
-    wget -nc https://ftp.debian.org/debian/pool/main/m/mime-support/mime-support_3.64_all.deb && \
+    wget -nc https://ftp.debian.org/debian/pool/main/m/mime-support/mime-support_${MIME_SUPPORT_VERSION}_all.deb && \
     wget -nc https://ftp.debian.org/debian/pool/main/p/python2.7/python2.7_${ALT_PYTHON_VERSION}_amd64.deb && \
-    dpkg -i python2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb && \
-    dpkg -i libpython2.7-stdlib_${ALT_PYTHON_VERSION}_amd64.deb && \
-    dpkg -i mime-support_3.64_all.deb && \
-    dpkg -i python2.7_${ALT_PYTHON_VERSION}_amd64.deb; \
-    apt-get install -f -y
-
-
+    dpkg -i libpython2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb \
+             libssl1.1_1.1.1w-0+deb11u1_amd64.deb \
+             libffi7_3.3-6_amd64.deb \
+             python2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb \
+             libpython2.7-stdlib_${ALT_PYTHON_VERSION}_amd64.deb \
+             mime-support_${MIME_SUPPORT_VERSION}_all.deb \
+             python2.7_${ALT_PYTHON_VERSION}_amd64.deb; \
+    apt-get update && \
+    apt-get install -f -y && \
+    rm -f libpython2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb \
+          libssl1.1_1.1.1w-0+deb11u1_amd64.deb \
+          libffi7_3.3-6_amd64.deb \
+          python2.7-minimal_${ALT_PYTHON_VERSION}_amd64.deb \
+          libpython2.7-stdlib_${ALT_PYTHON_VERSION}_amd64.deb \
+          mime-support_${MIME_SUPPORT_VERSION}_all.deb \
+          python2.7_${ALT_PYTHON_VERSION}_amd64.deb && \
+    ln -sf /usr/bin/python2.7 /usr/bin/python2
 
 # cleanup
 RUN apt-get clean && \
